@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lectis Academy - Resources</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="icon" href="../lectis-brand-kit/favicon.svg">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ev: #0D7C66;
+    --ev-dark: #095A4A;
+    --mint: #40B89C;
+    --sun: #F9B234;
+    --cream: #FEFAF3;
+    --charcoal: #1A2332;
+    --slate: #3D4F5F;
+    --wgray: #8896A4;
+    --soft-mint: #E8F5F0;
+    --white: #ffffff;
+    --border: rgba(0,0,0,0.06);
+    --shadow: 0 10px 30px rgba(26,35,50,0.06);
+  }
+  body {
+    min-height: 100vh;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--cream);
+    color: var(--charcoal);
+  }
+  .page { max-width: 1180px; margin: 0 auto; padding: 28px 24px 56px; }
+  .top-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 30px; }
+  .brand { display: flex; align-items: center; gap: 10px; color: var(--charcoal); text-decoration: none; }
+  .brand img { width: 55px; height:auto;}
+  .brand-text { font-family: 'DM Serif Display', serif; font-size: 34px; line-height: 1; }
+  .brand-text span { color: var(--sun); }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid var(--border); background: var(--white); color: var(--slate);
+    text-decoration: none; font-size: 13px; font-weight: 700;
+    padding: 10px 14px; border-radius: 8px; box-shadow: 0 6px 18px rgba(26,35,50,0.04);
+  }
+  .back-btn:hover { color: var(--ev); border-color: rgba(13,124,102,0.2); background: var(--soft-mint); }
+  .hero { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; align-items: end; margin-bottom: 24px; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(13,124,102,0.08); border: 1px solid rgba(13,124,102,0.14);
+    color: var(--ev); font-size: 11px; font-weight: 800; letter-spacing: 1.5px;
+    text-transform: uppercase; padding: 6px 12px; border-radius: 999px; margin-bottom: 12px;
+  }
+  h1 { font-family: 'DM Serif Display', serif; font-size: clamp(34px, 5vw, 54px); line-height: 0.95; margin-bottom: 10px; }
+  .hero-copy { max-width: 620px; color: var(--wgray); font-size: 15px; line-height: 1.7; }
+  .subject-card { min-width: 220px; background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 18px; box-shadow: var(--shadow); }
+  .subject-label { color: var(--wgray); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.4px; margin-bottom: 8px; }
+  .subject-name { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; }
+  .subject-icon { width: 42px; height: 42px; border-radius: 12px; background: var(--soft-mint); color: var(--ev); display: grid; place-items: center; font-size: 22px; }
+  .section-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 10px 0 14px; }
+  .section-title { font-size: 13px; font-weight: 800; color: var(--slate); letter-spacing: 0.8px; text-transform: uppercase; }
+  .resource-count { color: var(--wgray); font-size: 12px; font-weight: 700; }
+  .resource-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .resource-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 18px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 14px; min-height: 190px; }
+  .resource-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .file-icon { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; font-size: 22px; }
+  .type-pdf { background: rgba(220,53,69,0.08); color: #c0392b; }
+  .type-doc { background: rgba(13,124,102,0.1); color: var(--ev); }
+  .type-sheet { background: rgba(64,184,156,0.12); color: var(--mint); }
+  .type-video { background: rgba(249,178,52,0.14); color: #B8860B; }
+  .file-type { font-size: 10px; font-weight: 800; color: var(--wgray); background: rgba(0,0,0,0.04); padding: 4px 8px; border-radius: 999px; }
+  .resource-title { font-size: 16px; font-weight: 800; color: var(--charcoal); line-height: 1.35; }
+  .resource-meta { color: var(--wgray); font-size: 12px; line-height: 1.5; margin-top: 5px; }
+  .resource-actions { display: flex; gap: 8px; margin-top: auto; }
+  .resource-link { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 38px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: 800; }
+  .primary-link { background: var(--ev); color: var(--white); }
+  .primary-link:hover { background: var(--ev-dark); }
+  .soft-link { background: var(--soft-mint); color: var(--ev); }
+  .empty-note { margin-top: 18px; color: var(--wgray); font-size: 10px; line-height: 1.6; }
+  @media (max-width: 900px) {
+    .resource-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .hero { grid-template-columns: 1fr; }
+    .subject-card { min-width: 0; }
+  }
+  @media (max-width: 640px) {
+    .page { padding: 22px 16px 44px; }
+    .top-bar { align-items: flex-start; }
+    .brand-text { font-size: 21px; }
+    .back-btn { padding: 9px 11px; }
+    .resource-grid { grid-template-columns: 1fr; }
+    .resource-card { min-height: 0; }
+    .hero-copy { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="top-bar">
+    <a class="brand" href="test2.html" aria-label="Lectis Academy dashboard">
+      <img src="icon-transparent-200.png" alt="">
+      <span class="brand-text">Lectis <span>Academy</span></span>
+    </a>
+    <a class="back-btn" href="test2.html"><i class="ti ti-arrow-left"></i> Dashboard</a>
+  </div>
+
+  <section class="hero">
+    <div>
+      <div class="eyebrow"><i class="ti ti-folder-open"></i> Resource Library</div>
+      <h1 id="pageTitle">Subject resources</h1>
+      <p class="hero-copy" id="pageCopy">Open the PDFs and documents for the subject you selected from the dashboard.</p>
+    </div>
+    <aside class="subject-card">
+      <div class="subject-label">Currently viewing</div>
+      <div class="subject-name">
+        <span class="subject-icon" id="subjectIcon"><i class="ti ti-book"></i></span>
+        <span id="subjectName">Mathematics</span>
+      </div>
+    </aside>
+  </section>
+
+
+  <div class="section-head">
+    <div class="section-title">Documents and PDFs</div>
+    <div class="resource-count" id="resourceCount"></div>
+  </div>
+
+  <section class="resource-grid" id="resourceGrid"></section>
+  <p class="empty-note">(this is just a reminder,we'll remove this)Replace the sample file paths in this page with your actual PDF or document files whenever you add them to the project folder.</p>
+</main>
+
+<script>
+  const subjects = {
+    mathematics: { name: 'Mathematics', icon: 'ti ti-math', copy: 'Key formulas, worked examples, topic notes, and revision sheets for Mathematics.' },
+    physics: { name: 'Physics', icon: 'ti ti-atom', copy: 'Physics notes, experiment sheets, equations, and exam-style practice resources.' },
+    computer_science: { name: 'Computer Science', icon: 'ti ti-device-laptop', copy: 'Programming notes, algorithms, pseudocode sheets, and computer systems documents.' },
+    chemistry: { name: 'Chemistry', icon: 'ti ti-flask', copy: 'Chemistry topic notes, reaction summaries, required practicals, and revision resources.' },
+    biology: { name: 'Biology', icon: 'ti ti-dna', copy: 'Biology diagrams, process notes, definitions, and topic worksheets.' },
+    english: { name: 'English', icon: 'ti ti-pencil', copy: 'English guides, writing frames, literature notes, and essay planning documents.' }
+  };
+
+  const resources = [
+    { subject: 'mathematics', title: 'Algebra Formula Sheet', type: 'PDF', icon: 'ti ti-file-type-pdf', style: 'type-pdf', meta: 'Quick formulas and examples for algebra revision.', file: '#math-algebra-formula-sheet.pdf' },
+    { subject: 'mathematics', title: 'Quadratic Equations Worksheet', type: 'DOC', icon: 'ti ti-file-text', style: 'type-doc', meta: 'Practice questions with space for working.', file: '#math-quadratics-worksheet.docx' },
+    { subject: 'physics', title: 'Forces and Motion Notes', type: 'PDF', icon: 'ti ti-file-type-pdf', style: 'type-pdf', meta: 'Newton laws, motion graphs, and key definitions.', file: '#physics-forces-motion.pdf' },
+    { subject: 'physics', title: 'Required Practicals Checklist', type: 'DOC', icon: 'ti ti-clipboard-check', style: 'type-doc', meta: 'Method, variables, risks, and common exam prompts.', file: '#physics-practicals-checklist.docx' },
+    { subject: 'computer_science', title: 'Algorithms Revision Pack', type: 'PDF', icon: 'ti ti-file-type-pdf', style: 'type-pdf', meta: 'Searching, sorting, flowcharts, and pseudocode.', file: '#cs-algorithms-pack.pdf' },
+    { subject: 'computer_science', title: 'Python Practice Tasks', type: 'DOC', icon: 'ti ti-code', style: 'type-doc', meta: 'Short coding challenges arranged by difficulty.', file: '#cs-python-practice.docx' },
+    { subject: 'chemistry', title: 'Organic Chemistry Summary', type: 'PDF', icon: 'ti ti-file-type-pdf', style: 'type-pdf', meta: 'Functional groups, reactions, and naming rules.', file: '#chem-organic-summary.pdf' },
+    { subject: 'chemistry', title: 'Bonding and Structure Notes', type: 'DOC', icon: 'ti ti-file-text', style: 'type-doc', meta: 'Ionic, covalent, and metallic bonding explained.', file: '#chem-bonding-notes.docx' },
+    { subject: 'biology', title: 'Cell Biology Diagrams', type: 'PDF', icon: 'ti ti-file-type-pdf', style: 'type-pdf', meta: 'Labelled diagrams and key cell process summaries.', file: '#bio-cell-biology-diagrams.pdf' },
+    { subject: 'biology', title: 'Genetics Vocabulary Sheet', type: 'DOC', icon: 'ti ti-file-text', style: 'type-doc', meta: 'Core genetics terms with student-friendly definitions.', file: '#bio-genetics-vocab.docx' },
+    { subject: 'english', title: 'Essay Structure Guide', type: 'PDF', icon: 'ti ti-file-type-pdf', style: 'type-pdf', meta: 'Paragraph planning and evidence analysis prompts.', file: '#english-essay-structure.pdf' },
+    { subject: 'english', title: 'Language Techniques Bank', type: 'DOC', icon: 'ti ti-file-text', style: 'type-doc', meta: 'Technique examples for reading and writing tasks.', file: '#english-techniques-bank.docx' }
+  ];
+
+  function normaliseSubject(value) {
+    return String(value).toLowerCase().trim().replace(/[\s-]+/g, '_');
+  }
+
+  function setSubject(subjectKey) {
+    const key = subjects[subjectKey] ? subjectKey : 'mathematics';
+    const subject = subjects[key];
+    const visibleResources = resources.filter(item => item.subject === key);
+
+    document.title = `Lectis Academy - ${subject.name} Resources`;
+    document.getElementById('pageTitle').textContent = `${subject.name} resources`;
+    document.getElementById('pageCopy').textContent = subject.copy;
+    document.getElementById('subjectName').textContent = subject.name;
+    document.getElementById('subjectIcon').innerHTML = `<i class="${subject.icon}"></i>`;
+    document.getElementById('resourceCount').textContent = `${visibleResources.length} resources`;
+
+    document.getElementById('resourceGrid').innerHTML = visibleResources.map(resource => `
+      <article class="resource-card">
+        <div class="resource-top">
+          <span class="file-icon ${resource.style}"><i class="${resource.icon}"></i></span>
+          <span class="file-type">${resource.type}</span>
+        </div>
+        <div>
+          <h2 class="resource-title">${resource.title}</h2>
+          <p class="resource-meta">${resource.meta}</p>
+        </div>
+        <div class="resource-actions">
+          <a class="resource-link primary-link" href="${resource.file}"><i class="ti ti-eye"></i> View</a>
+          <a class="resource-link soft-link" href="${resource.file}" download><i class="ti ti-download"></i> Download</a>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  setSubject(normaliseSubject(params.get('subject') || 'mathematics'));
+</script>
+</body>
+</html>
