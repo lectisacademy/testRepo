@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lectis Academy — Parent Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ev: #0D7C66; --ev-dark: #095A4A; --mint: #40B89C; --sun: #F9B234;
+    --cream: #FEFAF3; --charcoal: #1A2332; --slate: #3D4F5F; --wgray: #8896A4;
+    --soft-mint: #E8F5F0; --white: #ffffff; --border: rgba(0,0,0,0.06);
+    --sidebar-w: 220px; --transition: 0.25s ease;
+  }
+
+  html, body { height: 100%; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--cream); overflow-x: hidden; }
+
+  .dash { display: flex; height: 100vh; overflow: hidden; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: var(--sidebar-w); flex-shrink: 0; background: var(--charcoal);
+    display: flex; flex-direction: column; padding: 20px 14px;
+    height: 100vh; overflow-y: auto; overflow-x: hidden; z-index: 100;
+  }
+  .s-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+  .s-logo-text { color: #fff; font-family: 'DM Serif Display', serif; font-size: 18px; white-space: nowrap; }
+  .s-logo-text span { color: var(--sun); }
+
+  /* Parent profile */
+  .parent-profile {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    padding: 16px 0 20px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 20px;
+  }
+  .parent-avatar {
+    width: 52px; height: 52px; border-radius: 50%; background: var(--sun);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700; color: var(--charcoal); border: 2px solid rgba(249,178,52,0.4);
+  }
+  .parent-name { color: #fff; font-size: 13px; font-weight: 600; text-align: center; }
+  .parent-label {
+    background: rgba(249,178,52,0.15); border: 1px solid rgba(249,178,52,0.25);
+    color: var(--sun); font-size: 10px; font-weight: 700;
+    padding: 2px 10px; border-radius: 20px;
+  }
+
+  /* Child card in sidebar */
+  .child-card {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 14px; margin-bottom: 20px;
+  }
+  .child-card-label { font-size: 10px; font-weight: 700; color: var(--wgray); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; }
+  .child-info { display: flex; align-items: center; gap: 10px; }
+  .child-avatar {
+    width: 36px; height: 36px; border-radius: 50%; background: var(--ev);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: #fff; border: 1.5px solid var(--mint); flex-shrink: 0;
+  }
+  .child-name { color: #fff; font-size: 13px; font-weight: 600; }
+  .child-grade { color: var(--wgray); font-size: 11px; }
+
+  .nav-label { color: var(--wgray); font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px;
+    color: rgba(255,255,255,0.6); font-size: 13px; font-weight: 500; cursor: pointer;
+    margin-bottom: 2px; transition: all 0.15s; text-decoration: none; white-space: nowrap;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.9); }
+  .nav-item.active { background: rgba(13,124,102,0.25); color: #fff; }
+  .nav-item.disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+  .nav-item i { font-size: 18px; flex-shrink: 0; }
+  .nav-item .lock-icon { font-size: 11px; margin-left: auto; opacity: 0.5; }
+
+  .spacer { flex: 1; }
+  .logout-btn {
+    display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 8px;
+    color: rgba(255,255,255,0.4); font-size: 13px; cursor: pointer; transition: all 0.15s;
+  }
+  .logout-btn:hover { color: rgba(255,255,255,0.7); }
+  .logout-btn i { font-size: 18px; }
+
+  /* ── MAIN ── */
+  .main { flex: 1; padding: 28px 24px; overflow-y: auto; overflow-x: hidden; min-width: 0; height: 100vh; transition: margin-left var(--transition), width var(--transition); }
+
+  /* Read only banner */
+  .readonly-banner {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(249,178,52,0.08); border: 1px solid rgba(249,178,52,0.2);
+    border-radius: 10px; padding: 10px 16px; margin-bottom: 24px;
+    font-size: 13px; color: var(--slate);
+  }
+  .readonly-banner strong { color: var(--charcoal); }
+
+  .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; gap: 12px; background: var(--cream); }
+  .top-left { display: flex; align-items: center; gap: 12px; }
+  .hamburger { display: none; background: none; border: none; color: var(--charcoal); font-size: 22px; cursor: pointer; padding: 4px; flex-shrink: 0; }
+
+  .greeting { font-family: 'DM Serif Display', serif; font-size: 24px; color: var(--charcoal); }
+  .greeting span { color: var(--ev); }
+  .top-sub { font-size: 12px; color: var(--wgray); margin-top: 3px; }
+
+  /* Stats */
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .stat-card { background: var(--white); border-radius: 12px; padding: 14px 16px; border: 1px solid var(--border); }
+  .stat-val { font-size: 22px; font-weight: 700; color: var(--charcoal); font-family: 'DM Serif Display', serif; }
+  .stat-label { font-size: 12px; color: var(--wgray); margin-top: 2px; }
+  .stat-pill { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-top: 5px; }
+  .pill-green { background: rgba(13,124,102,0.1); color: var(--ev); }
+  .pill-amber { background: rgba(249,178,52,0.15); color: #B8860B; }
+
+  .section-title { font-size: 12px; font-weight: 700; color: var(--slate); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 14px; }
+
+  /* Subject cards — parent only sees Roadmap, no Resources */
+  .subjects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+  .subj-card {
+    background: var(--white); border-radius: 14px; padding: 18px;
+    border: 1px solid var(--border);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .subj-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.07); }
+  .subj-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; font-size: 18px; }
+  .icon-math { background: rgba(13,124,102,0.1); }
+  .icon-phy  { background: rgba(64,184,156,0.12); }
+  .icon-cs   { background: rgba(249,178,52,0.12); }
+  .icon-chem { background: rgba(13,124,102,0.08); }
+  .icon-bio  { background: rgba(64,184,156,0.08); }
+  .icon-eng  { background: rgba(249,178,52,0.08); }
+  .subj-name { font-size: 14px; font-weight: 700; color: var(--charcoal); margin-bottom: 3px; }
+  .subj-meta { font-size: 11px; color: var(--wgray); margin-bottom: 12px; }
+  .progress-row { display: flex; align-items: center; gap: 8px; }
+  .progress-bar { flex: 1; height: 5px; background: var(--soft-mint); border-radius: 10px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 10px; background: var(--ev); }
+  .progress-fill.amber { background: var(--sun); }
+  .progress-pct { font-size: 11px; font-weight: 700; color: var(--ev); }
+  .progress-pct.amber { color: #B8860B; }
+
+  /* Only roadmap button — no resources */
+  .subj-btns { display: flex; gap: 7px; margin-top: 12px; }
+  .btn-road {
+    flex: 1; padding: 7px 0; border-radius: 8px; font-size: 11px; font-weight: 600;
+    text-align: center; cursor: pointer; border: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--ev); color: #fff; text-decoration: none; display: block;
+    transition: background 0.15s;
+  }
+  .btn-road:hover { background: var(--ev-dark); }
+  .btn-locked {
+    flex: 1; padding: 7px 0; border-radius: 8px; font-size: 11px; font-weight: 600;
+    text-align: center; border: none; font-family: 'Plus Jakarta Sans', sans-serif;
+    background: rgba(0,0,0,0.04); color: var(--wgray); cursor: not-allowed;
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 900px) { .subjects-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  @media (max-width: 640px) {
+    :root { --sidebar-w: 180px; }
+    body { background: var(--charcoal); }
+    .hamburger { display: flex; }
+    .sidebar {
+      position: fixed; left: 0; top: 0;
+      height: 100dvh; min-height: 0;
+      padding: 14px 10px 12px;
+      transform: translateX(-100%); transition: transform var(--transition);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    .sidebar.mobile-open { transform: translateX(0); overflow: hidden; }
+    .s-logo { gap: 8px; margin-bottom: 12px; }
+    .s-logo svg { width: 22px; height: 22px; }
+    .s-logo-text { font-size: 16px; }
+    .parent-profile { gap: 5px; padding: 8px 0 10px; margin-bottom: 12px; }
+    .parent-avatar { width: 42px; height: 42px; font-size: 15px; }
+    .parent-name { font-size: 12px; }
+    .parent-label { font-size: 9px; padding: 2px 8px; }
+    .child-card { padding: 10px; margin-bottom: 12px; }
+    .child-card-label { font-size: 9px; letter-spacing: 1.2px; margin-bottom: 8px; }
+    .child-info { gap: 8px; }
+    .child-avatar { width: 32px; height: 32px; font-size: 12px; }
+    .child-name { font-size: 12px; }
+    .child-grade { font-size: 10px; }
+    .nav-label { margin-bottom: 6px; }
+    .nav-item { padding: 8px 10px; font-size: 12px; gap: 8px; }
+    .nav-item i { font-size: 17px; }
+    .sidebar.mobile-open .spacer { flex: 1 !important; min-height: 8px; }
+    .logout-btn { padding: 8px 10px; font-size: 12px; }
+    .main { width: 100%; padding: 20px 16px calc(130px + env(safe-area-inset-bottom)); background: var(--cream); }
+    .main.shifted { margin-left: var(--sidebar-w); width: calc(100vw - var(--sidebar-w)); overflow-x: auto; }
+    .main.shifted .subjects-grid { grid-template-columns: minmax(250px, 1fr); }
+    .readonly-banner { align-items: flex-start; padding: 12px; gap: 8px; line-height: 1.45; }
+    .readonly-copy { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+    .readonly-copy strong { display: block; }
+    .main.shifted .readonly-banner { font-size: 12px; }
+    .main.shifted .readonly-icon { flex-shrink: 0; }
+    .greeting { font-size: 20px; }
+    .stats-row { gap: 8px; }
+    .stat-card { padding: 10px 12px; }
+    .stat-val { font-size: 17px; }
+    .stat-label { font-size: 10px; }
+    .subjects-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .subj-card { padding: 14px; }
+  }
+
+  @media (max-width: 380px) {
+    .stats-row { grid-template-columns: 1fr; }
+    .subjects-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="dash">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="s-logo">
+      <svg width="26" height="26" viewBox="0 0 60 60" style="flex-shrink:0;">
+        <g transform="translate(5,3)">
+          <path d="M10 52 L30 42 L50 52" fill="none" stroke="#0D7C66" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M10 52 L10 18 Q10 14 14 14 L26 14 Q30 14 30 18 L30 42" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M50 52 L50 18 Q50 14 46 14 L34 14 Q30 14 30 18 L30 42" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M30 28 Q30 12 20 4" fill="none" stroke="#F9B234" stroke-width="2" stroke-linecap="round"/>
+          <path d="M30 28 Q30 12 40 4" fill="none" stroke="#F9B234" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="20" cy="2" r="2" fill="#F9B234"/>
+          <circle cx="40" cy="2" r="2" fill="#F9B234"/>
+          <circle cx="30" cy="0" r="1.5" fill="#F9B234" opacity="0.7"/>
+        </g>
+      </svg>
+      <span class="s-logo-text">Lectis <span>Academy</span></span>
+    </div>
+
+    <!-- Parent profile -->
+    <div class="parent-profile">
+      <div class="parent-avatar">SR</div>
+      <div class="parent-name">Sarah Rahman</div>
+      <div class="parent-label">Parent account</div>
+    </div>
+
+    <!-- Child info -->
+    <div class="child-card">
+      <div class="child-card-label">Viewing progress for</div>
+      <div class="child-info">
+        <div class="child-avatar">AO</div>
+        <div>
+          <div class="child-name">Amara Okonkwo</div>
+          <div class="child-grade">Year 11 — GCSE</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-label">Menu</div>
+    <a class="nav-item active" href="#"><i class="ti ti-layout-dashboard"></i> Overview</a>
+    <div class="nav-item disabled"><i class="ti ti-brain"></i> Quizzes <span class="lock-icon">🔒</span></div>
+    <div class="nav-item disabled"><i class="ti ti-files"></i> Resources <span class="lock-icon">🔒</span></div>
+
+    <div class="spacer"></div>
+    <div class="logout-btn" onclick="window.location.href='parent-auth.html'"><i class="ti ti-logout"></i> Log out</div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main" id="main">
+
+    <!-- Hamburger for mobile -->
+    <div class="top-bar">
+      <div class="top-left">
+        <button class="hamburger" onclick="toggleMobileSidebar()" aria-label="Toggle menu">
+          <i class="ti ti-menu-2" id="hamburgerIcon"></i>
+        </button>
+        <div>
+          <div class="greeting">Hello, <span>Sarah</span> 👋</div>
+          <div class="top-sub">Here's how Amara is doing across all subjects.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Read only notice -->
+    <div class="readonly-banner">
+      <span class="readonly-icon">👁️</span>
+      <div class="readonly-copy">
+        <strong>Read-only view.</strong>
+        <span>You can view progress and roadmaps. Quiz results and resources are private to your child.</span>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-val">6</div>
+        <div class="stat-label">Subjects enrolled</div>
+        <div class="stat-pill pill-green">All active</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">14</div>
+        <div class="stat-label">Topics completed</div>
+        <div class="stat-pill pill-green">+3 this week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">2</div>
+        <div class="stat-label">Retakes needed</div>
+        <div class="stat-pill pill-amber">Needs attention</div>
+      </div>
+    </div>
+
+    <!-- Subjects — Roadmap only -->
+    <div class="section-title">Amara's subjects</div>
+    <div class="subjects-grid">
+
+      <div class="subj-card">
+        <div class="subj-icon icon-math"><i class="ti ti-math" style="color:var(--ev);"></i></div>
+        <div class="subj-name">Mathematics</div>
+        <div class="subj-meta">8 of 12 topics done</div>
+        <div class="progress-row">
+          <div class="progress-bar"><div class="progress-fill" style="width:82%"></div></div>
+          <div class="progress-pct">82%</div>
+        </div>
+        <div class="subj-btns">
+          <a class="btn-road" href="roadmap.html?view=parent">View Roadmap</a>
+          <div class="btn-locked">🔒 Resources</div>
+        </div>
+      </div>
+
+      <div class="subj-card">
+        <div class="subj-icon icon-phy"><i class="ti ti-atom" style="color:var(--mint);"></i></div>
+        <div class="subj-name">Physics</div>
+        <div class="subj-meta">9 of 10 topics done</div>
+        <div class="progress-row">
+          <div class="progress-bar"><div class="progress-fill" style="width:90%"></div></div>
+          <div class="progress-pct">90%</div>
+        </div>
+        <div class="subj-btns">
+          <a class="btn-road" href="roadmap.html?view=parent">View Roadmap</a>
+          <div class="btn-locked">🔒 Resources</div>
+        </div>
+      </div>
+
+      <div class="subj-card">
+        <div class="subj-icon icon-cs"><i class="ti ti-device-laptop" style="color:#B8860B;"></i></div>
+        <div class="subj-name">Computer Science</div>
+        <div class="subj-meta">7 of 10 topics done</div>
+        <div class="progress-row">
+          <div class="progress-bar"><div class="progress-fill amber" style="width:70%"></div></div>
+          <div class="progress-pct amber">70%</div>
+        </div>
+        <div class="subj-btns">
+          <a class="btn-road" href="roadmap.html?view=parent">View Roadmap</a>
+          <div class="btn-locked">🔒 Resources</div>
+        </div>
+      </div>
+
+      <div class="subj-card">
+        <div class="subj-icon icon-chem"><i class="ti ti-flask" style="color:var(--ev);"></i></div>
+        <div class="subj-name">Chemistry</div>
+        <div class="subj-meta">5 of 11 topics done</div>
+        <div class="progress-row">
+          <div class="progress-bar"><div class="progress-fill" style="width:45%"></div></div>
+          <div class="progress-pct">45%</div>
+        </div>
+        <div class="subj-btns">
+          <a class="btn-road" href="roadmap.html?view=parent">View Roadmap</a>
+          <div class="btn-locked">🔒 Resources</div>
+        </div>
+      </div>
+
+      <div class="subj-card">
+        <div class="subj-icon icon-bio"><i class="ti ti-dna" style="color:var(--mint);"></i></div>
+        <div class="subj-name">Biology</div>
+        <div class="subj-meta">6 of 12 topics done</div>
+        <div class="progress-row">
+          <div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div>
+          <div class="progress-pct">50%</div>
+        </div>
+        <div class="subj-btns">
+          <a class="btn-road" href="roadmap.html?view=parent">View Roadmap</a>
+          <div class="btn-locked">🔒 Resources</div>
+        </div>
+      </div>
+
+      <div class="subj-card">
+        <div class="subj-icon icon-eng"><i class="ti ti-pencil" style="color:#B8860B;"></i></div>
+        <div class="subj-name">English</div>
+        <div class="subj-meta">4 of 8 topics done</div>
+        <div class="progress-row">
+          <div class="progress-bar"><div class="progress-fill amber" style="width:60%"></div></div>
+          <div class="progress-pct amber">60%</div>
+        </div>
+        <div class="subj-btns">
+          <a class="btn-road" href="roadmap.html?view=parent">View Roadmap</a>
+          <div class="btn-locked">🔒 Resources</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const main = document.getElementById('main');
+  const hamburgerIcon = document.getElementById('hamburgerIcon');
+  let mobileOpen = false;
+
+  function toggleMobileSidebar() {
+    if (window.innerWidth > 640) return;
+    mobileOpen = !mobileOpen;
+    sidebar.classList.toggle('mobile-open', mobileOpen);
+    main.classList.toggle('shifted', mobileOpen);
+    hamburgerIcon.className = mobileOpen ? 'ti ti-x' : 'ti ti-menu-2';
+  }
+</script>
+
+</body>
+</html>
