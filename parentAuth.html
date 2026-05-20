@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lectis Academy — Parent Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ev: #0D7C66; --ev-dark: #095A4A; --mint: #40B89C; --sun: #F9B234;
+    --cream: #FEFAF3; --charcoal: #1A2332; --slate: #3D4F5F; --wgray: #8896A4;
+    --soft-mint: #E8F5F0; --white: #ffffff; --border: rgba(0,0,0,0.08);
+    --transition: 0.3s ease;
+  }
+
+  html, body { height: 100%; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--cream); }
+
+  .page { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+
+  /* ── BRAND PANEL ── */
+  .brand-panel {
+    background: var(--charcoal); display: flex; flex-direction: column;
+    justify-content: space-between; padding: 48px; position: relative; overflow: hidden;
+  }
+  .brand-panel::before {
+    content: ''; position: absolute; width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(13,124,102,0.25) 0%, transparent 70%);
+    top: -100px; left: -100px; border-radius: 50%; pointer-events: none;
+  }
+  .brand-panel::after {
+    content: ''; position: absolute; width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(249,178,52,0.1) 0%, transparent 70%);
+    bottom: -50px; right: -50px; border-radius: 50%; pointer-events: none;
+  }
+  .brand-logo { display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; }
+  .brand-logo-text { font-family: 'DM Serif Display', serif; font-size: 22px; color: #fff; }
+  .brand-logo-text span { color: var(--sun); }
+  .brand-content { position: relative; z-index: 1; }
+  .brand-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(249,178,52,0.15); border: 1px solid rgba(249,178,52,0.25);
+    color: var(--sun); font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 60px; margin-bottom: 24px;
+  }
+  .brand-headline { font-family: 'DM Serif Display', serif; font-size: 40px; line-height: 1.15; color: #fff; margin-bottom: 20px; }
+  .brand-headline em { font-style: italic; color: var(--sun); }
+  .brand-sub { font-size: 15px; color: rgba(255,255,255,0.55); line-height: 1.7; max-width: 340px; margin-bottom: 32px; }
+
+  /* What parents can see */
+  .parent-features { display: flex; flex-direction: column; gap: 12px; }
+  .parent-feature { display: flex; align-items: center; gap: 12px; }
+  .feature-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .feature-text { font-size: 13px; color: rgba(255,255,255,0.6); }
+  .feature-text strong { color: #fff; display: block; font-size: 13px; margin-bottom: 1px; }
+
+  .brand-footer { position: relative; z-index: 1; font-size: 13px; color: rgba(255,255,255,0.3); font-style: italic; }
+
+  /* ── FORM PANEL ── */
+  .form-panel {
+    background: var(--cream); display: flex; flex-direction: column;
+    justify-content: center; align-items: center; padding: 48px 40px;
+  }
+  .form-box { width: 100%; max-width: 400px; }
+
+  .auth-tabs {
+    display: flex; background: rgba(0,0,0,0.05); border-radius: 12px;
+    padding: 4px; margin-bottom: 36px;
+  }
+  .auth-tab {
+    flex: 1; padding: 10px; border-radius: 9px; font-size: 14px; font-weight: 600;
+    text-align: center; cursor: pointer; color: var(--wgray);
+    transition: all var(--transition); border: none; background: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .auth-tab.active { background: var(--white); color: var(--charcoal); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+  .form-heading { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--charcoal); margin-bottom: 6px; }
+  .form-sub { font-size: 14px; color: var(--wgray); margin-bottom: 28px; line-height: 1.5; }
+
+  .field { margin-bottom: 18px; }
+  .field label { display: block; font-size: 13px; font-weight: 600; color: var(--slate); margin-bottom: 7px; }
+  .field input {
+    width: 100%; padding: 12px 16px; border-radius: 10px;
+    border: 1.5px solid var(--border); background: var(--white);
+    font-size: 14px; font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--charcoal); outline: none;
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+  .field input:focus { border-color: var(--ev); box-shadow: 0 0 0 3px rgba(13,124,102,0.1); }
+  .field input::placeholder { color: var(--wgray); }
+
+  .pw-wrap { position: relative; }
+  .pw-wrap input { padding-right: 44px; }
+  .pw-toggle {
+    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; color: var(--wgray);
+    font-size: 16px; padding: 0; display: flex; align-items: center;
+  }
+  .pw-toggle:hover { color: var(--slate); }
+
+  .forgot { text-align: right; margin-top: -10px; margin-bottom: 18px; }
+  .forgot a { font-size: 12px; color: var(--ev); text-decoration: none; font-weight: 600; }
+  .forgot a:hover { text-decoration: underline; }
+
+  .submit-btn {
+    width: 100%; padding: 14px; border-radius: 10px; border: none;
+    background: var(--ev); color: #fff; font-size: 15px; font-weight: 700;
+    font-family: 'Plus Jakarta Sans', sans-serif; cursor: pointer;
+    transition: background var(--transition), transform var(--transition); margin-top: 4px;
+  }
+  .submit-btn:hover { background: var(--ev-dark); transform: translateY(-1px); }
+
+  /* Read-only notice */
+  .readonly-notice {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(13,124,102,0.06); border: 1px solid rgba(13,124,102,0.15);
+    border-radius: 10px; padding: 12px 14px; margin-top: 20px;
+  }
+  .readonly-notice p { font-size: 12px; color: var(--slate); line-height: 1.6; }
+  .readonly-notice strong { color: var(--charcoal); }
+
+  .switch-text { text-align: center; font-size: 13px; color: var(--wgray); margin-top: 24px; }
+  .switch-text a { color: var(--ev); font-weight: 700; text-decoration: none; cursor: pointer; }
+  .switch-text a:hover { text-decoration: underline; }
+
+  /* Student portal link */
+  .portal-divider { text-align: center; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .portal-divider p { font-size: 12px; color: var(--wgray); margin-bottom: 10px; }
+  .portal-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 600; color: var(--slate);
+    text-decoration: none; padding: 8px 16px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--white);
+    transition: all 0.15s;
+  }
+  .portal-link:hover { color: var(--ev); border-color: rgba(13,124,102,0.2); background: var(--soft-mint); }
+
+  .form-view { display: none; animation: fadeUp 0.3s ease; }
+  .form-view.active { display: block; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    .page { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+    .brand-panel { padding: 28px 24px 32px; min-height: auto; }
+    .brand-panel::before { width: 250px; height: 250px; }
+    .brand-panel::after { display: none; }
+    .brand-content { margin-top: 24px; }
+    .brand-headline { font-size: 26px; margin-bottom: 12px; }
+    .brand-sub { display: none; }
+    .parent-features { display: none; }
+    .brand-footer { display: none; }
+    .form-panel { padding: 32px 24px 48px; justify-content: flex-start; }
+    .form-box { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- LEFT: BRANDING -->
+  <div class="brand-panel">
+    <div class="brand-logo">
+      <svg width="32" height="32" viewBox="0 0 60 60">
+        <g transform="translate(5,3)">
+          <path d="M10 52 L30 42 L50 52" fill="none" stroke="#0D7C66" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M10 52 L10 18 Q10 14 14 14 L26 14 Q30 14 30 18 L30 42" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M50 52 L50 18 Q50 14 46 14 L34 14 Q30 14 30 18 L30 42" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M30 28 Q30 12 20 4" fill="none" stroke="#F9B234" stroke-width="2" stroke-linecap="round"/>
+          <path d="M30 28 Q30 12 40 4" fill="none" stroke="#F9B234" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="20" cy="2" r="2" fill="#F9B234"/>
+          <circle cx="40" cy="2" r="2" fill="#F9B234"/>
+          <circle cx="30" cy="0" r="1.5" fill="#F9B234" opacity="0.7"/>
+        </g>
+      </svg>
+      <span class="brand-logo-text">Lectis <span>Academy</span></span>
+    </div>
+
+    <div class="brand-content">
+      <div class="brand-tag">👨‍👩‍👧 Parent Portal</div>
+      <div class="brand-headline">Stay close to your child's <em>progress.</em></div>
+      <p class="brand-sub">Get a clear view of how your child is doing — which topics they've completed, what's pending, and where they might need support.</p>
+
+      <div class="parent-features">
+        <div class="parent-feature">
+          <div class="feature-icon">📊</div>
+          <div class="feature-text">
+            <strong>View subject progress</strong>
+            See completion percentages across all enrolled subjects.
+          </div>
+        </div>
+        <div class="parent-feature">
+          <div class="feature-icon">🗺️</div>
+          <div class="feature-text">
+            <strong>Browse topic roadmaps</strong>
+            See exactly which topics are done, pending, or need a retake.
+          </div>
+        </div>
+        <div class="parent-feature">
+          <div class="feature-icon">🔒</div>
+          <div class="feature-text">
+            <strong>Read-only access</strong>
+            You can view progress but quiz details remain private to the student.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="brand-footer">"Where understanding begins." — Lectis Academy</div>
+  </div>
+
+  <!-- RIGHT: FORM -->
+  <div class="form-panel">
+    <div class="form-box">
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Log in</button>
+        <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Sign up</button>
+      </div>
+
+      <!-- LOG IN -->
+      <div class="form-view active" id="view-login">
+        <div class="form-heading">Welcome back</div>
+        <div class="form-sub">Log in to view your child's progress.</div>
+
+        <div class="field">
+          <label for="login-email">Email address</label>
+          <input type="email" id="login-email" placeholder="you@example.com">
+        </div>
+
+        <div class="field">
+          <label for="login-password">Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="login-password" placeholder="Enter your password">
+            <button class="pw-toggle" onclick="togglePw('login-password', this)" tabindex="-1">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="forgot"><a href="#">Forgot password?</a></div>
+
+        <button class="submit-btn" onclick="handleLogin()">View my child's progress</button>
+
+        <div class="readonly-notice">
+          <p>👁️ &nbsp;<strong>Read-only access.</strong> As a parent you can view subject progress and topic roadmaps. Quiz results and resources are private to the student.</p>
+        </div>
+
+        <div class="switch-text">Don't have an account? <a onclick="switchTab('signup')">Sign up</a></div>
+      </div>
+
+      <!-- SIGN UP -->
+      <div class="form-view" id="view-signup">
+        <div class="form-heading">Create account</div>
+        <div class="form-sub">Sign up to start tracking your child's learning journey.</div>
+
+        <div class="field">
+          <label for="signup-name">Your full name</label>
+          <input type="text" id="signup-name" placeholder="Your full name">
+        </div>
+
+        <div class="field">
+          <label for="signup-email">Email address</label>
+          <input type="email" id="signup-email" placeholder="you@example.com">
+        </div>
+
+        <div class="field">
+          <label for="signup-password">Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="signup-password" placeholder="Create a password">
+            <button class="pw-toggle" onclick="togglePw('signup-password', this)" tabindex="-1">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <button class="submit-btn" onclick="handleSignup()">Create parent account</button>
+
+        <div class="readonly-notice">
+          <p>👁️ &nbsp;<strong>Read-only access.</strong> Your account will be linked to your child's profile by the admin after sign up.</p>
+        </div>
+
+        <div class="switch-text">Already have an account? <a onclick="switchTab('login')">Log in</a></div>
+      </div>
+
+      <!-- Link to student portal -->
+      <div class="portal-divider">
+        <p>Are you a student?</p>
+        <a class="portal-link" href="auth.html">→ Go to Student Portal</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  function switchTab(tab) {
+    document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+    document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+    document.getElementById('view-login').classList.toggle('active', tab === 'login');
+    document.getElementById('view-signup').classList.toggle('active', tab === 'signup');
+  }
+
+  function togglePw(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    btn.innerHTML = isHidden
+      ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
+      : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+  }
+
+  function handleLogin() {
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    if (!email || !password) { alert('Please fill in all fields.'); return; }
+    // TODO: connect to backend
+    window.location.href = 'parent-dashboard.html';
+  }
+
+  function handleSignup() {
+    const name = document.getElementById('signup-name').value;
+    const email = document.getElementById('signup-email').value;
+    const password = document.getElementById('signup-password').value;
+    if (!name || !email || !password) { alert('Please fill in all fields.'); return; }
+    // TODO: connect to backend
+    alert('Account created! An admin will link your account to your child\'s profile shortly.');
+  }
+</script>
+
+</body>
+</html>
